@@ -60,21 +60,22 @@ const SearchContent = () => {
 
         <form onSubmit={handleSubmit} className='relative group'>
           <div className='absolute inset-0 bg-gradient-to-r from-primary/20 to-violet-600/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500' />
-          <div className='relative flex items-center bg-zinc-900/80 backdrop-blur-xl border border-white/10 rounded-full p-2 shadow-2xl focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/50 transition-all'>
-            <Search className='w-5 h-5 text-gray-400 ml-4' />
+          <div className='relative flex items-center bg-zinc-900/80 backdrop-blur-xl border border-white/10 rounded-full p-1.5 md:p-2 shadow-2xl focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/50 transition-all'>
+            <Search className='w-4 h-4 md:w-5 md:h-5 text-gray-400 ml-2 md:ml-4 flex-shrink-0' />
             <input
               type='text'
               name='query'
               defaultValue={query}
               placeholder='Cari judul komik...'
-              className='flex-1 bg-transparent border-none text-white placeholder-gray-500 px-4 py-2 focus:outline-none focus:ring-0'
+              className='flex-1 bg-transparent border-none text-white placeholder-gray-500 px-2 md:px-4 py-2 focus:outline-none focus:ring-0 text-sm md:text-base min-w-0'
               autoComplete='off'
             />
             <button
               type='submit'
-              className='px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded-full font-medium transition-all shadow-lg shadow-primary/20'
+              className='px-3 md:px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded-full font-medium transition-all shadow-lg shadow-primary/20 text-sm md:text-base flex-shrink-0'
             >
-              Cari
+              <span className='hidden sm:inline'>Cari</span>
+              <Search className='w-4 h-4 sm:hidden' />
             </button>
           </div>
         </form>
