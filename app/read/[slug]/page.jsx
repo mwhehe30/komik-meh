@@ -6,6 +6,7 @@ import { getChapterImage, getDetailKomik } from '@/lib/api';
 import useHistoryStore from '@/store/useHistoryStore';
 import {
   ArrowLeft,
+  BookText,
   ChevronLeft,
   ChevronRight,
   Home,
@@ -91,20 +92,24 @@ const Page = () => {
             show ? 'translate-y-0' : '-translate-y-40'
           } transition-all duration-300`}
         >
-          <button
-            onClick={() => window.history.back()}
-            className='flex items-center gap-2 cursor-pointer'
-          >
-            <ArrowLeft />
-          </button>
-          <div className='flex items-center justify-center gap-2 px-4'>
-            <h1 className='text-lg font-medium w-fit line-clamp-1 break-all'>
-              {chapter?.title}
-            </h1>
-          </div>
-          <Link href='/' className='cursor-pointer'>
-            <Home />
-          </Link>
+          {chapter?.title && (
+            <>
+              <button
+                onClick={() => window.history.back()}
+                className='flex items-center gap-2 cursor-pointer'
+              >
+                <ArrowLeft />
+              </button>
+              <div className='flex items-center justify-center gap-2 px-4'>
+                <h1 className='text-lg font-medium w-fit line-clamp-1 break-all'>
+                  {chapter?.title}
+                </h1>
+              </div>
+              <Link href='/' className='cursor-pointer'>
+                <Home />
+              </Link>
+            </>
+          )}
         </section>
 
         {!chapter ? (
@@ -115,53 +120,55 @@ const Page = () => {
           </div>
         ) : null}
 
-        <section>
-          <div className='max-w-3xl fixed overflow-hidden bottom-8 left-2 right-2 mx-auto text-white flex items-center justify-center gap-8'>
-            {chapter?.previous_chapter_slug && (
+        {chapter && (
+          <section>
+            <div className='max-w-3xl fixed overflow-hidden bottom-8 left-2 right-2 mx-auto text-white flex items-center justify-center gap-8'>
+              {chapter?.previous_chapter_slug && (
+                <Link
+                  href={`/read/${chapter?.previous_chapter_slug}`}
+                  className={`md:size-20 size-16 bg-black rounded-full flex items-center justify-center cursor-pointer ${
+                    show ? 'translate-y-0' : 'translate-y-20'
+                  } transition-all duration-300`}
+                >
+                  <ChevronLeft />
+                </Link>
+              )}
+
+              <button
+                onClick={toggleScroll}
+                className={`size-16 md:size-20 bg-black rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer ${
+                  auto
+                    ? 'translate-y-0'
+                    : show
+                    ? 'translate-y-0'
+                    : 'translate-y-20'
+                }`}
+              >
+                {auto ? <Pause /> : <Play />}
+              </button>
+
               <Link
-                href={`/read/${chapter?.previous_chapter_slug}`}
+                href={`/komik/${chapter?.komik_slug}`}
                 className={`md:size-20 size-16 bg-black rounded-full flex items-center justify-center cursor-pointer ${
                   show ? 'translate-y-0' : 'translate-y-20'
                 } transition-all duration-300`}
               >
-                <ChevronLeft />
+                <BookText />
               </Link>
-            )}
 
-            <button
-              onClick={toggleScroll}
-              className={`size-16 md:size-20 bg-black rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer ${
-                auto
-                  ? 'translate-y-0'
-                  : show
-                  ? 'translate-y-0'
-                  : 'translate-y-20'
-              }`}
-            >
-              {auto ? <Pause /> : <Play />}
-            </button>
-
-            <Link
-              href={`/komik/${chapter?.komik_slug}`}
-              className={`md:size-20 size-16 bg-black rounded-full flex items-center justify-center cursor-pointer ${
-                show ? 'translate-y-0' : 'translate-y-20'
-              } transition-all duration-300`}
-            >
-              <Home />
-            </Link>
-
-            {chapter?.next_chapter_slug && (
-              <Link
-                href={`/read/${chapter?.next_chapter_slug}`}
-                className={`md:size-20 size-16 bg-black rounded-full flex items-center justify-center cursor-pointer ${
-                  show ? 'translate-y-0' : 'translate-y-20'
-                } transition-all duration-300`}
-              >
-                <ChevronRight />
-              </Link>
-            )}
-          </div>
-        </section>
+              {chapter?.next_chapter_slug && (
+                <Link
+                  href={`/read/${chapter?.next_chapter_slug}`}
+                  className={`md:size-20 size-16 bg-black rounded-full flex items-center justify-center cursor-pointer ${
+                    show ? 'translate-y-0' : 'translate-y-20'
+                  } transition-all duration-300`}
+                >
+                  <ChevronRight />
+                </Link>
+              )}
+            </div>
+          </section>
+        )}
 
         <section className='flex flex-col max-w-5xl mx-auto'>
           {chapter?.images?.map((src, i) => (
@@ -172,7 +179,7 @@ const Page = () => {
               width={800}
               height={1200}
               className='w-full h-auto'
-              priority={i < 3} // Prioritize first 3 images
+              priority={i < 3}
               onContextMenu={(e) => e.preventDefault()}
             />
           ))}
