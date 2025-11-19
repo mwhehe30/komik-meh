@@ -1,13 +1,15 @@
 'use client';
 
 import KomikCard from '@/components/KomikCard';
+import { Skeleton } from '@/components/Skeleton';
 import { SearchKomik } from '@/lib/api';
 import { Search } from 'lucide-react';
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense, useEffect, useState } from 'react';
 
-const SearchPage = () => {
+const SearchContent = () => {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const q = searchParams.get('q') || '';
 
   const [query, setQuery] = useState(q);
@@ -16,8 +18,14 @@ const SearchPage = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (query) handleSearch(query);
-  }, [query]);
+    if (q) {
+      setQuery(q);
+      handleSearch(q);
+    } else {
+      setResults(null);
+      setQuery('');
+    }
+  }, [q]);
 
   const handleSearch = async (searchQuery) => {
     setLoading(true);
@@ -37,16 +45,14 @@ const SearchPage = () => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const searchQuery = formData.get('query');
-    setQuery(searchQuery);
 
-    // update URL tanpa refresh
-    const params = new URLSearchParams(window.location.search);
-    params.set('q', searchQuery);
-    window.history.replaceState(null, '', `?${params.toString()}`);
+    if (searchQuery && searchQuery.trim() !== '') {
+      router.replace(`/search?q=${encodeURIComponent(searchQuery)}`);
+    }
   };
 
   return (
-    <main className='min-h-screen pb-24 pt-24 container mx-auto px-4'>
+    <>
       <div className='max-w-2xl mx-auto mb-12 text-center'>
         <h1 className='text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 mb-6'>
           Cari Komik
@@ -77,10 +83,10 @@ const SearchPage = () => {
       {loading ? (
         <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6'>
           {[...Array(10)].map((_, i) => (
-            <div
-              key={i}
-              className='aspect-[3/4] bg-zinc-800/50 rounded-xl animate-pulse'
-            />
+            <div key={i} className='space-y-2'>
+              <Skeleton className='aspect-[3/4] w-full rounded-xl' />
+              <Skeleton className='h-4 w-3/4' />
+            </div>
           ))}
         </div>
       ) : error ? (
@@ -113,16 +119,27 @@ const SearchPage = () => {
           </div>
         )
       ) : (
-        !loading &&
-        !query && (
-          <div className='flex flex-col items-center justify-center py-20 text-center opacity-50'>
-            <Search className='w-16 h-16 text-gray-600 mb-4' />
-            <p className='text-gray-500'>
-              Ketik judul komik untuk mulai mencari
-            </p>
-          </div>
-        )
+        <div className='flex flex-col items-center justify-center py-20 text-center opacity-50'>
+          <Search className='w-16 h-16 text-gray-600 mb-4' />
+          <p className='text-gray-500'>Ketik judul komik untuk mulai mencari</p>
+        </div>
       )}
+    </>
+  );
+};
+
+const SearchPage = () => {
+  return (
+    <main className='min-h-screen pb-24 pt-24 container mx-auto px-4'>
+      <Suspense
+        fallback={
+          <div className='flex justify-center py-20'>
+            <div className='w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin' />
+          </div>
+        }
+      >
+        <SearchContent />
+      </Suspense>
     </main>
   );
 };
