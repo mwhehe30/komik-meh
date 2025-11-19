@@ -15,8 +15,8 @@ export default function HistoryPage() {
   const { readChapters, clearHistory } = useHistoryStore();
   const [mounted, setMounted] = useState(false);
 
-  // Prevent hydration mismatch by waiting for mount
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
@@ -38,7 +38,7 @@ export default function HistoryPage() {
   return (
     <main className='min-h-screen pb-24 pt-20 container mx-auto px-4'>
       <div className='flex justify-between items-center mb-8'>
-        <h1 className='text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400'>
+        <h1 className='text-3xl font-bold bg-clip-text text-transparent bg-linear-to-r from-white to-gray-400'>
           Riwayat Bacaan
         </h1>
         {readChapters.length > 0 && (
@@ -79,7 +79,7 @@ export default function HistoryPage() {
               className='group relative flex gap-4 bg-zinc-900/50 hover:bg-zinc-900 border border-zinc-800 hover:border-zinc-700 p-3 rounded-xl transition-all duration-300 overflow-hidden'
             >
               {/* Thumbnail */}
-              <div className='relative w-20 aspect-[3/4] flex-shrink-0 rounded-lg overflow-hidden'>
+              <div className='relative w-20 aspect-3/4 shrink-0 rounded-lg overflow-hidden'>
                 <UniversalImage
                   src={item.thumbnail}
                   alt={item.comicTitle || 'Thumbnail'}
@@ -103,7 +103,7 @@ export default function HistoryPage() {
               </div>
 
               {/* Glow Effect */}
-              <div className='absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none' />
+              <div className='absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none' />
             </Link>
           ))}
         </div>

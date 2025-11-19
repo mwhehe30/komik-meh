@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 const UniversalImage = ({
   src,
@@ -12,15 +12,10 @@ const UniversalImage = ({
   height,
   sizes,
   priority = false,
-  fallback, // Optional custom fallback element
-  ...props // Pass through other props
+  fallback,
+  ...props
 }) => {
   const [error, setError] = useState(false);
-
-  // Reset error state when src changes
-  useEffect(() => {
-    setError(false);
-  }, [src]);
 
   const hasSrc = src && src.trim() !== '';
 
@@ -41,6 +36,7 @@ const UniversalImage = ({
 
   return (
     <Image
+      key={src}
       src={src}
       alt={alt || 'Image'}
       className={className}

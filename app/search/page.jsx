@@ -54,14 +54,14 @@ const SearchContent = () => {
   return (
     <>
       <div className='max-w-2xl mx-auto mb-12 text-center'>
-        <h1 className='text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 mb-6'>
+        <h1 className='text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-linear-to-r from-white to-gray-400 mb-6'>
           Cari Komik
         </h1>
 
         <form onSubmit={handleSubmit} className='relative group'>
-          <div className='absolute inset-0 bg-gradient-to-r from-primary/20 to-violet-600/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500' />
+          <div className='absolute inset-0 bg-linear-to-r from-primary/20 to-violet-600/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500' />
           <div className='relative flex items-center bg-zinc-900/80 backdrop-blur-xl border border-white/10 rounded-full p-1.5 md:p-2 shadow-2xl focus-within:border-primary/50 focus-within:ring-1 focus-within:ring-primary/50 transition-all'>
-            <Search className='w-4 h-4 md:w-5 md:h-5 text-gray-400 ml-2 md:ml-4 flex-shrink-0' />
+            <Search className='w-4 h-4 md:w-5 md:h-5 text-gray-400 ml-2 md:ml-4 shrink-0' />
             <input
               type='text'
               name='query'
@@ -72,7 +72,7 @@ const SearchContent = () => {
             />
             <button
               type='submit'
-              className='px-3 md:px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded-full font-medium transition-all shadow-lg shadow-primary/20 text-sm md:text-base flex-shrink-0'
+              className='px-3 md:px-6 py-2 bg-primary hover:bg-primary/90 text-white rounded-full font-medium transition-all shadow-lg shadow-primary/20 text-sm md:text-base shrink-0'
             >
               <span className='hidden sm:inline'>Cari</span>
               <Search className='w-4 h-4 sm:hidden' />
@@ -85,7 +85,7 @@ const SearchContent = () => {
         <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6'>
           {[...Array(10)].map((_, i) => (
             <div key={i} className='space-y-2'>
-              <Skeleton className='aspect-[3/4] w-full rounded-xl' />
+              <Skeleton className='aspect-3/4 w-full rounded-xl' />
               <Skeleton className='h-4 w-3/4' />
             </div>
           ))}
@@ -98,7 +98,7 @@ const SearchContent = () => {
         results.length > 0 ? (
           <div className='space-y-6'>
             <h2 className='text-xl font-semibold text-gray-300'>
-              Hasil pencarian untuk "{query}" ({results.length})
+              Hasil pencarian untuk &quot;{query}&quot; ({results.length})
             </h2>
             <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6'>
               {results.map((komik, index) => (
@@ -115,7 +115,8 @@ const SearchContent = () => {
               Tidak ditemukan
             </h3>
             <p className='text-gray-500'>
-              Maaf, kami tidak dapat menemukan komik dengan kata kunci "{query}"
+              Maaf, kami tidak dapat menemukan komik dengan kata kunci &quot;
+              {query}&quot;
             </p>
           </div>
         )

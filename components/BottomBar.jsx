@@ -9,7 +9,7 @@ const BottomBar = () => {
   return (
     <div className='md:hidden fixed bottom-0 left-0 right-0 z-50 pb-safe'>
       {/* Gradient Fade for smooth transition */}
-      <div className='absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none' />
+      <div className='absolute bottom-0 left-0 right-0 h-24 bg-linear-to-t from-black via-black/80 to-transparent pointer-events-none' />
 
       <div className='relative bg-black/80 backdrop-blur-xl border-t border-white/10 px-6 py-3'>
         <ul className='flex justify-around items-center'>

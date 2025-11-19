@@ -24,7 +24,7 @@ export default function Home() {
 
   return (
     <main className='container mx-auto px-4 pt-4 pb-24'>
-      <h1 className='text-3xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400'>
+      <h1 className='text-3xl font-bold mb-6 bg-clip-text text-transparent bg-linear-to-r from-white to-gray-400'>
         Update Terbaru
       </h1>
 
@@ -32,7 +32,7 @@ export default function Home() {
         <div className='grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2 md:gap-4'>
           {[...Array(12)].map((_, i) => (
             <div key={i} className='space-y-2'>
-              <Skeleton className='aspect-[3/4] w-full rounded-xl' />
+              <Skeleton className='aspect-3/4 w-full rounded-xl' />
               <Skeleton className='h-4 w-3/4' />
               <Skeleton className='h-3 w-1/2' />
             </div>

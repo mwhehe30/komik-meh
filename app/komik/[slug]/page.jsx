@@ -17,8 +17,8 @@ timeago.register('id_ID', id);
 const Page = () => {
   const { slug } = useParams();
   const [detailKomik, setDetailKomik] = useState(null);
-  const { readChapters, markAsRead } = useHistoryStore();
-  const [sortOrder, setSortOrder] = useState('desc'); // 'desc' or 'asc'
+  const { readChapters } = useHistoryStore();
+  const [sortOrder, setSortOrder] = useState('desc');
 
   useEffect(() => {
     const fetchDetailKomik = async () => {
@@ -29,7 +29,7 @@ const Page = () => {
   }, [slug]);
 
   return (
-    <main className='min-h-screen pb-20'>
+    <main className='min-h-screen pb-24'>
       {detailKomik ? (
         <>
           {/* Hero Section with Blurred Background */}
@@ -39,11 +39,11 @@ const Page = () => {
               className='absolute inset-0 bg-cover bg-center blur-2xl scale-110 opacity-40'
               style={{ backgroundImage: `url(${detailKomik?.thumbnail})` }}
             />
-            <div className='absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-t from-background via-background/80 to-transparent z-20' />
+            <div className='absolute bottom-0 left-0 right-0 h-64 bg-linear-to-t from-background via-background/80 to-transparent z-20' />
 
             <div className='container mx-auto px-4 relative z-30 flex flex-col md:flex-row items-end pb-10 gap-8 w-full'>
               {/* Thumbnail */}
-              <div className='relative w-[calc(100%-30px)] md:w-56 aspect-[3/4] flex-shrink-0 rounded-xl overflow-hidden shadow-2xl border-4 border-zinc-800/50 mx-auto md:mx-0 mt-4'>
+              <div className='relative w-[calc(100%-30px)] md:w-56 aspect-3/4 shrink-0 rounded-xl overflow-hidden shadow-2xl border-4 border-zinc-800/50 mx-auto md:mx-0 mt-4'>
                 <UniversalImage
                   src={detailKomik?.thumbnail}
                   alt={detailKomik?.title}
@@ -88,7 +88,7 @@ const Page = () => {
                       }`}
                       className='relative inline-flex items-center justify-center gap-3 px-8 py-4 overflow-hidden font-bold text-white transition-all duration-300 ease-out rounded-2xl shadow-2xl shadow-violet-500/20 group hover:scale-105 hover:shadow-violet-500/40 w-full md:w-auto'
                     >
-                      <span className='absolute inset-0 w-full h-full bg-gradient-to-br from-violet-600 via-indigo-600 to-blue-600 opacity-100 group-hover:opacity-90'></span>
+                      <span className='absolute inset-0 w-full h-full bg-linear-to-br from-violet-600 via-indigo-600 to-blue-600 opacity-100 group-hover:opacity-90'></span>
                       <span className='absolute bottom-0 right-0 block w-64 h-64 mb-32 mr-4 transition duration-500 origin-bottom-left transform rotate-45 translate-x-24 bg-white/10 rounded-full opacity-30 group-hover:rotate-90 ease'></span>
                       <span className='relative flex items-center gap-2 text-lg tracking-wide'>
                         Mulai Baca Chapter 1
@@ -156,16 +156,6 @@ const Page = () => {
                       <Link
                         href={`/read/${chapter.slug}`}
                         key={index}
-                        onClick={() =>
-                          markAsRead({
-                            slug: chapter.slug,
-                            title: chapter.title,
-                            comicSlug: slug,
-                            comicTitle: detailKomik.title,
-                            thumbnail: detailKomik.thumbnail,
-                            released_at: chapter.released_at,
-                          })
-                        }
                         className={`group flex justify-between items-center p-4 rounded-xl border transition-all duration-200 ${
                           isRead
                             ? 'bg-zinc-900/50 border-zinc-800 text-gray-500'
@@ -211,7 +201,7 @@ const Page = () => {
           {/* Hero Skeleton */}
           <div className='relative w-full min-h-[50vh] md:min-h-[500px] bg-zinc-900 flex items-end pb-10'>
             <div className='container mx-auto px-4 flex flex-col md:flex-row items-end gap-8 w-full'>
-              <Skeleton className='w-[calc(100%-30px)] md:w-56 aspect-[3/4] rounded-xl mx-auto md:mx-0 mt-4' />
+              <Skeleton className='w-[calc(100%-30px)] md:w-56 aspect-3/4 rounded-xl mx-auto md:mx-0 mt-4' />
               <div className='flex-1 w-full space-y-4'>
                 <Skeleton className='h-10 md:h-14 w-3/4 mx-auto md:mx-0' />
                 <div className='flex gap-3 justify-center md:justify-start'>

@@ -2,7 +2,8 @@
 
 import { Skeleton } from '@/components/Skeleton';
 import UniversalImage from '@/components/UniversalImage';
-import { getChapterImage } from '@/lib/api';
+import { getChapterImage, getDetailKomik } from '@/lib/api';
+import useHistoryStore from '@/store/useHistoryStore';
 import {
   ArrowLeft,
   ChevronLeft,
@@ -20,8 +21,8 @@ const Page = () => {
   const [chapter, setChapter] = useState(null);
   const [show, setShow] = useState(true);
   const [auto, setAuto] = useState(false);
-
-  const scrollRef = useRef(null); // ⬅️ Tambahkan ref untuk <main>
+  const { markAsRead } = useHistoryStore();
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     const fetchChapterImage = async () => {
@@ -36,17 +37,39 @@ const Page = () => {
     fetchChapterImage();
   }, [slug]);
 
-  // Auto scroll
+  useEffect(() => {
+    const saveToHistory = async () => {
+      if (!chapter || !chapter.komik_slug) return;
+
+      try {
+        const comicDetails = await getDetailKomik(chapter.komik_slug);
+
+        markAsRead({
+          slug: slug,
+          title: chapter.title,
+          comicSlug: chapter.komik_slug,
+          comicTitle: comicDetails.title,
+          thumbnail: comicDetails.thumbnail,
+          released_at: chapter.released_at || new Date().toISOString(),
+        });
+      } catch (error) {
+        console.error('Failed to save reading history:', error);
+      }
+    };
+
+    saveToHistory();
+  }, [chapter, slug, markAsRead]);
+
   useEffect(() => {
     if (!auto) return;
 
     const interval = setInterval(() => {
       if (scrollRef.current) {
         scrollRef.current.scrollBy({
-          top: 1.5, // pelan
+          top: 1.5,
         });
       }
-    }, 16); // 60fps
+    }, 16);
 
     return () => clearInterval(interval);
   }, [auto]);
@@ -87,7 +110,7 @@ const Page = () => {
         {!chapter ? (
           <div className='max-w-5xl mx-auto space-y-4'>
             {[...Array(3)].map((_, i) => (
-              <Skeleton key={i} className='w-full aspect-[2/3] rounded-lg' />
+              <Skeleton key={i} className='w-full aspect-2/3 rounded-lg' />
             ))}
           </div>
         ) : null}

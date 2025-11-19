@@ -13,10 +13,10 @@ const NavBar = () => {
         <div className='flex justify-between items-center h-16'>
           {/* Logo */}
           <Link href='/' className='flex items-center gap-2 group'>
-            <div className='w-8 h-8 bg-gradient-to-br from-primary to-violet-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-lg group-hover:shadow-primary/50 transition-all'>
+            <div className='w-8 h-8 bg-linear-to-br from-primary to-violet-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-lg group-hover:shadow-primary/50 transition-all'>
               K
             </div>
-            <span className='text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 group-hover:to-white transition-all'>
+            <span className='text-xl font-bold bg-clip-text text-transparent bg-linear-to-r from-white to-gray-400 group-hover:to-white transition-all'>
               KomikMeh
             </span>
           </Link>

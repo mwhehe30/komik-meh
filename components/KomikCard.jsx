@@ -7,7 +7,7 @@ const KomikCard = ({ komik }) => {
       {/* Thumbnail Image */}
       <Link
         href={`/komik/${komik.slug}`}
-        className='block aspect-[3/4] relative overflow-hidden'
+        className='block aspect-3/4 relative overflow-hidden'
       >
         <UniversalImage
           src={komik.thumbnail}
@@ -17,7 +17,7 @@ const KomikCard = ({ komik }) => {
           sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
         />
         {/* Gradient Overlay */}
-        <div className='absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80 group-hover:opacity-60 transition-opacity' />
+        <div className='absolute inset-0 bg-linear-to-t from-black/90 via-black/30 to-transparent opacity-80 group-hover:opacity-60 transition-opacity' />
 
         {/* Type Badge (Optional if data exists) */}
         {komik.type && (
