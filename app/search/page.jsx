@@ -5,7 +5,7 @@ import { Skeleton } from '@/components/Skeleton';
 import { SearchKomik } from '@/lib/api';
 import { Search } from 'lucide-react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 
 const SearchContent = () => {
   const searchParams = useSearchParams();
@@ -16,30 +16,96 @@ const SearchContent = () => {
   const [results, setResults] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const loadMoreRef = useRef(null);
 
   useEffect(() => {
     if (q) {
       setQuery(q);
-      handleSearch(q);
+      setResults(null);
+      setPage(1);
+      setHasMore(false);
+      handleSearch(q, 1, true);
     } else {
       setResults(null);
       setQuery('');
+      setPage(1);
+      setHasMore(false);
     }
   }, [q]);
 
-  const handleSearch = async (searchQuery) => {
-    setLoading(true);
+  const handleSearch = async (searchQuery, pageToLoad = 1, replace = true) => {
+    if (!searchQuery) return;
+
+    if (pageToLoad === 1) {
+      setLoading(true);
+    } else {
+      setIsLoadingMore(true);
+    }
+
     setError(null);
+
     try {
-      const { data } = await SearchKomik(searchQuery);
-      setResults(data);
+      const { data, meta } = await SearchKomik(searchQuery, pageToLoad);
+
+      setResults((prev) => {
+        if (!prev || replace || pageToLoad === 1) {
+          return data;
+        }
+        return [...prev, ...data];
+      });
+
+      const nextPage = meta?.pagination?.next_page;
+      const currentPage = meta?.pagination?.current_page ?? pageToLoad;
+
+      setPage(currentPage);
+      setHasMore(Boolean(nextPage));
     } catch (err) {
       console.error(err);
       setError('Failed to fetch search results');
     } finally {
-      setLoading(false);
+      if (pageToLoad === 1) {
+        setLoading(false);
+      } else {
+        setIsLoadingMore(false);
+      }
     }
   };
+
+  useEffect(() => {
+    if (!hasMore || loading || isLoadingMore) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (!entry.isIntersecting) return;
+
+        handleSearch(query, page + 1, false);
+      },
+      {
+        root: null,
+        rootMargin: '0px 0px 200px 0px',
+        threshold: 0.1,
+      }
+    );
+
+    const node = loadMoreRef.current;
+
+    if (node) {
+      observer.observe(node);
+    }
+
+    return () => {
+      if (node) {
+        observer.unobserve(node);
+      }
+      observer.disconnect();
+    };
+  }, [hasMore, loading, isLoadingMore, query, page]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -81,7 +147,7 @@ const SearchContent = () => {
         </form>
       </div>
 
-      {loading ? (
+      {loading && !results ? (
         <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6'>
           {[...Array(10)].map((_, i) => (
             <div key={i} className='space-y-2'>
@@ -105,6 +171,16 @@ const SearchContent = () => {
                 <KomikCard komik={komik} key={index} />
               ))}
             </div>
+            {hasMore && (
+              <div
+                ref={loadMoreRef}
+                className='flex justify-center items-center py-8'
+              >
+                {isLoadingMore && (
+                  <div className='w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin' />
+                )}
+              </div>
+            )}
           </div>
         ) : (
           <div className='flex flex-col items-center justify-center py-20 text-center'>

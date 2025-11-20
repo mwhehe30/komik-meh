@@ -3,10 +3,12 @@
 import KomikCard from '@/components/KomikCard';
 import { Skeleton } from '@/components/Skeleton';
 import { getLatestKomik } from '@/lib/api';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 export default function Home() {
   const [latestKomik, setLatestKomik] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [visibleCount, setVisibleCount] = useState(12);
+  const loadMoreRef = useRef(null);
 
   useEffect(() => {
     const fetchLatestKomik = async () => {
@@ -21,6 +23,35 @@ export default function Home() {
     };
     fetchLatestKomik();
   }, []);
+
+  useEffect(() => {
+    if (!latestKomik || latestKomik.length <= visibleCount) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (!entry.isIntersecting) return;
+
+        setVisibleCount((prev) => {
+          const nextCount = prev + 18;
+          return latestKomik ? Math.min(nextCount, latestKomik.length) : prev;
+        });
+      },
+      {
+        root: null,
+        rootMargin: '0px 0px 200px 0px',
+        threshold: 0.1,
+      }
+    );
+
+    if (loadMoreRef.current) {
+      observer.observe(loadMoreRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [latestKomik, visibleCount]);
 
   return (
     <main className='container mx-auto px-4 pt-4 pb-24'>
@@ -39,11 +70,16 @@ export default function Home() {
           ))}
         </div>
       ) : (
-        <div className='grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2 md:gap-4'>
-          {latestKomik?.map((komik, index) => (
-            <KomikCard key={index} komik={komik} />
-          ))}
-        </div>
+        <>
+          <div className='grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-2 md:gap-4'>
+            {latestKomik?.slice(0, visibleCount).map((komik, index) => (
+              <KomikCard key={index} komik={komik} />
+            ))}
+          </div>
+          {latestKomik && latestKomik.length > visibleCount && (
+            <div ref={loadMoreRef} className='h-8' />
+          )}
+        </>
       )}
     </main>
   );

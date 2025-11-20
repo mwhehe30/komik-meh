@@ -91,7 +91,7 @@ const Page = () => {
                       <span className='absolute inset-0 w-full h-full bg-linear-to-br from-violet-600 via-indigo-600 to-blue-600 opacity-100 group-hover:opacity-90'></span>
                       <span className='absolute bottom-0 right-0 block w-64 h-64 mb-32 mr-4 transition duration-500 origin-bottom-left transform rotate-45 translate-x-24 bg-white/10 rounded-full opacity-30 group-hover:rotate-90 ease'></span>
                       <span className='relative flex items-center gap-2 text-lg tracking-wide'>
-                        Mulai Baca Chapter 1
+                        Mulai Baca Awal
                       </span>
                     </Link>
                   </div>
