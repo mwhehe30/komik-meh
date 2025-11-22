@@ -88,7 +88,7 @@ const Page = () => {
     >
       <div className='container mx-auto'>
         <section
-          className={`bg-[#27272a] md:px-8 px-3 mx-2 rounded-lg py-6 flex items-center justify-between sticky top-2 z-50 mb-4 ${
+          className={`bg-dark-light md:px-8 px-3 mx-2 rounded-lg py-6 flex items-center justify-between sticky top-2 z-50 mb-4 ${
             show ? 'translate-y-0' : '-translate-y-40'
           } transition-all duration-300`}
         >
@@ -103,6 +103,10 @@ const Page = () => {
               <div className='flex items-center justify-center gap-2 px-4'>
                 <h1 className='text-lg font-medium w-fit line-clamp-1 break-all'>
                   {chapter?.title}
+                </h1>
+                <ChevronRight />
+                <h1 className='text-lg font-medium text-violet-600'>
+                  {chapter?.chapter_number}
                 </h1>
               </div>
               <Link href='/' className='cursor-pointer'>
@@ -126,7 +130,7 @@ const Page = () => {
               {chapter?.previous_chapter_slug && (
                 <Link
                   href={`/read/${chapter?.previous_chapter_slug}`}
-                  className={`md:size-20 size-16 bg-black rounded-full flex items-center justify-center cursor-pointer ${
+                  className={`md:size-20 size-16 bg-dark-light rounded-full flex items-center justify-center cursor-pointer ${
                     show ? 'translate-y-0' : 'translate-y-20'
                   } transition-all duration-300`}
                 >
@@ -136,7 +140,7 @@ const Page = () => {
 
               <button
                 onClick={toggleScroll}
-                className={`size-16 md:size-20 bg-black rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer ${
+                className={`size-16 md:size-20 bg-dark-light rounded-full flex items-center justify-center transition-all duration-300 cursor-pointer ${
                   auto
                     ? 'translate-y-0'
                     : show
@@ -149,7 +153,7 @@ const Page = () => {
 
               <Link
                 href={`/komik/${chapter?.komik_slug}`}
-                className={`md:size-20 size-16 bg-black rounded-full flex items-center justify-center cursor-pointer ${
+                className={`md:size-20 size-16 bg-dark-light rounded-full flex items-center justify-center cursor-pointer ${
                   show ? 'translate-y-0' : 'translate-y-20'
                 } transition-all duration-300`}
               >
@@ -159,7 +163,7 @@ const Page = () => {
               {chapter?.next_chapter_slug && (
                 <Link
                   href={`/read/${chapter?.next_chapter_slug}`}
-                  className={`md:size-20 size-16 bg-black rounded-full flex items-center justify-center cursor-pointer ${
+                  className={`md:size-20 size-16 bg-dark-light rounded-full flex items-center justify-center cursor-pointer ${
                     show ? 'translate-y-0' : 'translate-y-20'
                   } transition-all duration-300`}
                 >
