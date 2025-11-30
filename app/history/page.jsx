@@ -91,10 +91,12 @@ export default function HistoryPage() {
               {/* Content */}
               <div className='flex-1 min-w-0 flex flex-col justify-center'>
                 <h3 className='font-bold text-gray-200 truncate group-hover:text-primary transition-colors mb-1'>
-                  {item.comicTitle}
+                  {item.chapterNumber
+                    ? `Chapter ${item.chapterNumber}`
+                    : item.title}
                 </h3>
                 <p className='text-sm text-gray-400 font-medium mb-2'>
-                  {item.title}
+                  {item.comicTitle}
                 </p>
                 <div className='flex items-center gap-2 text-xs text-gray-500'>
                   <span>Dibaca</span>

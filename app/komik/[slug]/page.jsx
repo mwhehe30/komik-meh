@@ -33,10 +33,8 @@ const Page = () => {
   }, [slug]);
 
   useEffect(() => {
-    if (detailKomik) {
-      setIsBookmarked(bookmarks.some((b) => b.slug === detailKomik.slug));
-    }
-  }, [bookmarks, detailKomik]);
+    setIsBookmarked(bookmarks.some((b) => b.slug === slug));
+  }, [bookmarks, slug]);
 
   return (
     <main className='min-h-screen pb-24'>
@@ -118,7 +116,14 @@ const Page = () => {
 
                   {/* Bookmark Button */}
                   <button
-                    onClick={() => toggleBookmark(detailKomik)}
+                    onClick={() =>
+                      toggleBookmark({
+                        slug: slug,
+                        title: detailKomik.title,
+                        thumbnail: detailKomik.thumbnail,
+                        type: detailKomik.type,
+                      })
+                    }
                     className={`relative inline-flex items-center justify-center gap-2 px-6 py-4 overflow-hidden font-bold transition-all duration-300 ease-out rounded-2xl shadow-xl group hover:scale-105 w-full md:w-auto border ${
                       isBookmarked
                         ? 'bg-red-500/20 border-red-500/50 text-red-500 hover:bg-red-500/30'

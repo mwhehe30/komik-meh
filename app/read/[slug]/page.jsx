@@ -52,6 +52,7 @@ const Page = () => {
           comicTitle: comicDetails.title,
           thumbnail: comicDetails.thumbnail,
           released_at: chapter.released_at || new Date().toISOString(),
+          chapterNumber: chapter.chapter_number,
         });
       } catch (error) {
         console.error('Failed to save reading history:', error);

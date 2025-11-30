@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import BookmarkButton from './BookmarkButton';
+
 import UniversalImage from './UniversalImage';
 
 import { memo } from 'react';
@@ -33,11 +33,6 @@ const KomikCard = memo(({ komik, priority = false }) => {
         )}
       </Link>
 
-      {/* Bookmark Button */}
-      <div className='absolute top-2 right-2 z-20'>
-        <BookmarkButton komik={komik} />
-      </div>
-
       {/* Content Info */}
       <div className='relative md:absolute bottom-0 left-0 right-0 p-2 md:p-4 bg-zinc-900 md:bg-transparent rounded-b-xl md:rounded-none'>
         <Link href={`/komik/${komik.slug}`} prefetch={false}>
@@ -48,13 +43,15 @@ const KomikCard = memo(({ komik, priority = false }) => {
 
         <div className='flex justify-between items-center mt-1 md:mt-2'>
           {/* Latest Chapter Link */}
-          <Link
-            href={`/read/${komik.latest_chapter.slug}`}
-            prefetch={false}
-            className='text-[9px] md:text-xs font-medium text-zinc-300 bg-zinc-800 md:bg-zinc-800/90 hover:bg-primary hover:text-white px-2 py-1 md:px-3 md:py-1.5 rounded-full transition-colors truncate max-w-full'
-          >
-            {komik.latest_chapter.title}
-          </Link>
+          {komik.latest_chapter && (
+            <Link
+              href={`/read/${komik.latest_chapter.slug}`}
+              prefetch={false}
+              className='text-[9px] md:text-xs font-medium text-zinc-300 bg-zinc-800 md:bg-zinc-800/90 hover:bg-primary hover:text-white px-2 py-1 md:px-3 md:py-1.5 rounded-full transition-colors truncate max-w-full'
+            >
+              {komik.latest_chapter.title}
+            </Link>
+          )}
         </div>
       </div>
     </div>

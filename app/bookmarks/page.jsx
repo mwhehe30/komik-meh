@@ -1,15 +1,10 @@
 'use client';
 
-import UniversalImage from '@/components/UniversalImage';
+import KomikCard from '@/components/KomikCard';
 import useBookmarkStore from '@/store/useBookmarkStore';
 import { Bookmark, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import TimeAgo from 'timeago-react';
-import * as timeago from 'timeago.js';
-import id from 'timeago.js/lib/lang/id_ID';
-
-timeago.register('id_ID', id);
 
 export default function BookmarksPage() {
   const { bookmarks, clearBookmarks, removeBookmark } = useBookmarkStore();
@@ -70,48 +65,18 @@ export default function BookmarksPage() {
           </Link>
         </div>
       ) : (
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
+        <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4'>
           {bookmarks.map((item, index) => (
-            <div key={index} className='relative group'>
-              <Link
-                href={`/komik/${item.slug}`}
-                className='flex gap-4 bg-zinc-900/50 hover:bg-zinc-900 border border-zinc-800 hover:border-zinc-700 p-3 rounded-xl transition-all duration-300 overflow-hidden h-full'
-              >
-                {/* Thumbnail */}
-                <div className='relative w-20 aspect-3/4 shrink-0 rounded-lg overflow-hidden'>
-                  <UniversalImage
-                    src={item.thumbnail}
-                    alt={item.title || 'Thumbnail'}
-                    fill
-                    className='object-cover group-hover:scale-110 transition-transform duration-500'
-                  />
-                </div>
-
-                {/* Content */}
-                <div className='flex-1 min-w-0 flex flex-col justify-center'>
-                  <h3 className='font-bold text-gray-200 truncate group-hover:text-primary transition-colors mb-1'>
-                    {item.title}
-                  </h3>
-                  <p className='text-sm text-gray-400 font-medium mb-2'>
-                    {item.type}
-                  </p>
-                  <div className='flex items-center gap-2 text-xs text-gray-500'>
-                    <span>Ditambahkan</span>
-                    <TimeAgo datetime={item.bookmarkedAt} locale='id_ID' />
-                  </div>
-                </div>
-
-                {/* Glow Effect */}
-                <div className='absolute inset-0 bg-linear-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none' />
-              </Link>
-
-              {/* Remove Button */}
+            <div key={index} className='relative group/bookmark'>
+              <KomikCard komik={item} />
+              {/* Delete Button */}
               <button
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
                   removeBookmark(item.slug);
                 }}
-                className='absolute top-2 right-2 p-2 bg-black/50 hover:bg-red-500/80 text-white rounded-full backdrop-blur-sm transition-colors opacity-0 group-hover:opacity-100'
+                className='absolute top-2 right-2 z-20 p-2 bg-black/70 hover:bg-red-500 text-white rounded-full backdrop-blur-sm transition-all duration-200 opacity-0 group-hover/bookmark:opacity-100'
                 title='Hapus dari favorit'
               >
                 <Trash2 className='w-4 h-4' />
